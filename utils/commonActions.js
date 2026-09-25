@@ -15,6 +15,18 @@ class CommonPage {
         this.page = page;
     }
 
+    async waitForVisible(locator) {
+    await locator.waitFor({
+        state: 'visible'
+    });
+    }
+
+    async waitForHidden(locator) {
+    await locator.waitFor({
+        state: 'hidden'
+    });
+    }
+    
     async open(url) {
         await this.page.goto(url);
     }
@@ -57,6 +69,7 @@ class PlaywrightPage extends CommonPage {
     }
 
     async openDocs() {
+        await this.waitForVisible(this.getStartedLink);
         await this.getStartedLink.click();
     }
 
@@ -65,11 +78,11 @@ class PlaywrightPage extends CommonPage {
     }
 
     async verifyGetStartedVisible() {
-        await expect(this.getStartedLink).toBeVisible();
+        await this.waitForVisible(this.getStartedLink);
     }
 
     async verifyInstallationVisible() {
-        await expect(this.installationHeading).toBeVisible();
+        await this.waitForVisible(this.installationHeading);
     }
 
     async verifyInstallationText(text) {
@@ -86,9 +99,9 @@ class PlaywrightPage extends CommonPage {
 
     async verifyLinkLocators() {
         const links = this.page.getByRole('link');
-        await expect(links.first()).toBeVisible();
-        await expect(links.last()).toBeVisible();
-        await expect(links.nth(2)).toBeVisible();
+        await this.waitForVisible(links.first());
+        await this.waitForVisible(links.last());
+        await this.waitForVisible(links.nth(2));
     }
 }
 
